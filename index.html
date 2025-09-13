@@ -87,7 +87,8 @@
     <meta name="apple-mobile-web-app-title" content="Jay Gurudev">
     
     <!-- Critical Resource Hints -->
-    <link rel="preload" href="logo.webp" as="image" type="image/webp">
+    <link rel="preload" href="logo.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="background.webp" as="image" type="image/webp" fetchpriority="high">
     
     <!-- Favicon for all devices and browsers -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -106,14 +107,14 @@
             --bg-gradient-end: #764ba2;
             --container-bg: rgba(255, 255, 255, 0.1);
             --container-border: rgba(255, 255, 255, 0.2);
-            --text-primary: white;
-            --text-secondary: rgba(255, 255, 255, 0.9);
-            --text-tertiary: rgba(255, 255, 255, 0.8);
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --text-tertiary: #5a6c7d;
             --social-bg: rgba(255, 255, 255, 0.95);
             --social-text: #2c3e50;
-            --social-border: rgba(255, 255, 255, 0.3);
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --logo-border: rgba(255, 255, 255, 0.3);
+            --social-border: rgba(0, 0, 0, 0.2);
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --logo-border: rgba(0, 0, 0, 0.3);
         }
         
         [data-theme="dark"] {
@@ -131,6 +132,10 @@
             --shadow-color: rgba(45, 27, 105, 0.3);
             --logo-border: rgba(255, 255, 255, 0.4);
         }
+        
+        [data-theme="dark"] body::before {
+            background: linear-gradient(135deg, rgba(45, 27, 105, 0.1) 0%, rgba(17, 153, 142, 0.1) 100%);
+        }
 
         * {
             margin: 0;
@@ -141,7 +146,11 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background-image: url('background.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -155,6 +164,18 @@
             transform: translateZ(0);
         }
         
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
         body.loading {
             overflow: hidden;
         }
@@ -162,11 +183,11 @@
         .container {
             text-align: center;
             padding: 25px 20px;
-            background: var(--container-bg);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
             border-radius: 16px;
-            border: 1px solid var(--container-border);
-            box-shadow: 0 8px 32px var(--shadow-color);
+            border: 3px solid rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             max-width: 400px;
             width: 95%;
             animation: fadeInUp 0.8s ease-out;
@@ -215,29 +236,31 @@
         }
 
         .username {
-            color: var(--text-primary);
+            color: white;
             font-size: 1.3rem;
             font-weight: 700;
             margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
             text-align: center;
             transition: all 0.3s ease;
         }
 
         .title {
-            color: var(--text-primary);
+            color: white;
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
 
         .subtitle {
-            color: var(--text-secondary);
+            color: white;
             font-size: 0.9rem;
             margin-bottom: 20px;
             font-weight: 300;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
             transition: all 0.3s ease;
         }
 
@@ -254,8 +277,8 @@
             align-items: center;
             justify-content: center;
             padding: 12px 16px;
-            background: var(--social-bg);
-            border: 2px solid var(--social-border);
+            background: rgba(255, 255, 255, 0.9);
+            border: 3px solid rgba(0, 0, 0, 0.3);
             border-radius: 12px;
             text-decoration: none;
             color: var(--social-text);
@@ -263,7 +286,7 @@
             font-size: 0.8rem;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             backdrop-filter: blur(10px);
-            box-shadow: 0 2px 12px var(--shadow-color);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
             min-height: 44px;
@@ -389,11 +412,12 @@
         }
 
         .cta {
-            color: var(--text-tertiary);
+            color: white;
             font-size: 0.75rem;
             font-style: italic;
             margin-bottom: 10px;
             transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
         }
 
         .contact-section {
@@ -401,10 +425,10 @@
         }
         
         .contact-info {
-            color: var(--text-secondary);
+            color: white;
             font-size: 0.85rem;
             font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
             letter-spacing: 0.3px;
             transition: all 0.3s ease;
             display: flex;
@@ -418,7 +442,8 @@
             align-items: flex-start;
             justify-content: center;
             font-size: 0.75rem;
-            color: var(--text-secondary);
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
         }
         
         .contact-icon,
@@ -603,23 +628,28 @@
         }
         
         .stat-number {
-            color: var(--text-primary);
+            color: white;
             font-size: 1.2rem;
             font-weight: 700;
             display: block;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
         
         .stat-label {
-            color: var(--text-secondary);
+            color: white;
             font-size: 0.7rem;
             margin-top: 2px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
         }
         
         /* Share Button */
         .share-button {
             position: fixed;
             bottom: 20px;
-            right: 20px;
+            left: 20px;
             width: 50px;
             height: 50px;
             border-radius: 50%;
@@ -633,11 +663,21 @@
             z-index: 1000;
             box-shadow: 0 4px 20px var(--shadow-color);
         }
-        
+
+        /* Desktop Share Button Position */
+        @media (min-width: 1025px) {
+            .share-button {
+                bottom: 30px;
+                left: 30px;
+                width: 55px;
+                height: 55px;
+            }
+        }
+
         @media (max-width: 480px) {
             .share-button {
                 bottom: 15px;
-                right: 15px;
+                left: 15px;
                 width: 45px;
                 height: 45px;
             }
@@ -647,10 +687,16 @@
                 border: 2px solid rgba(255, 255, 255, 0.5);
                 box-shadow: 0 4px 20px rgba(17, 153, 142, 0.4);
             }
-            
-            [data-theme="dark"] .share-button svg {
-                fill: #ffffff;
-            }
+        }
+
+        [data-theme="dark"] .share-button {
+            background: linear-gradient(135deg, rgba(17, 153, 142, 0.9), rgba(45, 27, 105, 0.9));
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 20px rgba(17, 153, 142, 0.4);
+        }
+        
+        [data-theme="dark"] .share-button svg {
+            fill: #ffffff;
         }
         
         .share-button:hover {
@@ -838,22 +884,62 @@
         /* Desktop - No Scroll Layout */
         @media (min-width: 1025px) {
             body {
-                padding: 20px;
+                padding: 15px;
                 min-height: 100vh;
                 display: flex;
-                align-items: flex-start;
+                align-items: center;
                 justify-content: center;
-                padding-top: 5vh;
+                overflow: hidden;
             }
             
             .container {
-                padding: 25px 35px;
-                max-width: 480px;
-                width: 90%;
-                max-height: none;
+                padding: 20px 30px;
+                max-width: 420px;
+                width: 85%;
+                max-height: 90vh;
                 min-height: auto;
                 border-radius: 20px;
-                overflow: visible;
+                overflow-y: auto;
+                transform: scale(0.95);
+            }
+            
+            /* Desktop Dark Mode Styles */
+            [data-theme="dark"] .container {
+                background: rgba(45, 27, 105, 0.6);
+                border: 3px solid rgba(17, 153, 142, 0.9);
+                box-shadow: 0 8px 32px rgba(45, 27, 105, 0.4);
+            }
+            
+            [data-theme="dark"] .username,
+            [data-theme="dark"] .title,
+            [data-theme="dark"] .subtitle,
+            [data-theme="dark"] .contact-info,
+            [data-theme="dark"] .location-info {
+                color: white;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            }
+            
+            [data-theme="dark"] .social-link {
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 255, 0.95));
+                border: 3px solid rgba(17, 153, 142, 0.6);
+                color: #2d1b69;
+                box-shadow: 0 4px 16px rgba(17, 153, 142, 0.3);
+            }
+            
+            [data-theme="dark"] .logo {
+                border: 3px solid rgba(17, 153, 142, 0.8);
+                box-shadow: 0 4px 16px rgba(17, 153, 142, 0.4);
+            }
+            
+            [data-theme="dark"] .cta {
+                color: white;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+            }
+            
+            [data-theme="dark"] .stat-number,
+            [data-theme="dark"] .stat-label {
+                color: white;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
             }
             
             .logo {
@@ -919,7 +1005,8 @@
                 align-items: flex-start;
                 justify-content: center;
                 font-size: 0.8rem;
-                color: var(--text-secondary);
+                color: white;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
             }
             
             .location-text {
@@ -941,6 +1028,37 @@
                 padding: 30px 40px;
                 max-height: none;
                 min-height: auto;
+            }
+            
+            /* Large Desktop Dark Mode */
+            [data-theme="dark"] .container {
+                background: rgba(45, 27, 105, 0.6);
+                border: 3px solid rgba(17, 153, 142, 0.9);
+                box-shadow: 0 8px 32px rgba(45, 27, 105, 0.4);
+            }
+            
+            [data-theme="dark"] .username,
+            [data-theme="dark"] .title,
+            [data-theme="dark"] .subtitle,
+            [data-theme="dark"] .contact-info,
+            [data-theme="dark"] .location-info,
+            [data-theme="dark"] .cta,
+            [data-theme="dark"] .stat-number,
+            [data-theme="dark"] .stat-label {
+                color: white;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            }
+            
+            [data-theme="dark"] .social-link {
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 255, 0.95));
+                border: 3px solid rgba(17, 153, 142, 0.6);
+                color: #2d1b69;
+                box-shadow: 0 4px 16px rgba(17, 153, 142, 0.3);
+            }
+            
+            [data-theme="dark"] .logo {
+                border: 3px solid rgba(17, 153, 142, 0.8);
+                box-shadow: 0 4px 16px rgba(17, 153, 142, 0.4);
             }
             
             .logo {
@@ -1068,8 +1186,8 @@
             
             /* Attractive night mode mobile fixes */
             [data-theme="dark"] .container {
-                background: rgba(45, 27, 105, 0.4);
-                border: 2px solid rgba(17, 153, 142, 0.5);
+                background: rgba(45, 27, 105, 0.6);
+                border: 3px solid rgba(17, 153, 142, 0.9);
                 box-shadow: 0 8px 32px rgba(45, 27, 105, 0.4);
             }
             
@@ -1232,7 +1350,7 @@
     </div>
 
     <div class="container">
-        <img src="logo.webp" alt="Jay Gurudev Logo" class="logo" width="80" height="80">
+        <img src="logo.webp" alt="Jay Gurudev Logo" class="logo" width="80" height="80" fetchpriority="high" loading="eager">
         <p class="username">@jay.gurudev1985</p>
         
         <!-- Bio Section -->
@@ -1415,8 +1533,8 @@
                 
                 // Set custom location text with proper formatting
                 document.getElementById('userLocation').innerHTML = `
-                    <div style="margin-bottom: 3px;">1. આદેશધામ ,સંઘપુર</div>
-                    <div>2. આદેશમંદિર ,થરાદ</div>
+                    <div style="margin-bottom: 3px; color: white; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);">1. આદેશધામ ,સંઘપુર</div>
+                    <div style="color: white; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);">2. આદેશમંદિર ,થરાદ</div>
                 `;
                 
                 clearTimeout(timeoutId);
@@ -1613,6 +1731,12 @@
         function optimizeImages() {
             const images = document.querySelectorAll('img');
             images.forEach(img => {
+                // Skip critical images (logo) that should load eagerly
+                if (img.classList.contains('logo')) {
+                    return;
+                }
+                
+                // Apply lazy loading to non-critical images
                 if (!img.hasAttribute('loading')) {
                     img.setAttribute('loading', 'lazy');
                 }
@@ -1624,12 +1748,18 @@
         
         // Critical resource loading optimization
         function preloadCriticalResources() {
-            const criticalImages = ['logo.webp'];
+            const criticalImages = ['logo.webp', 'background.webp'];
             criticalImages.forEach(src => {
                 const link = document.createElement('link');
                 link.rel = 'preload';
                 link.as = 'image';
                 link.href = src;
+                link.fetchPriority = 'high';
+                if (src.includes('.JPG') || src.includes('.jpg')) {
+                    link.type = 'image/jpeg';
+                } else if (src.includes('.webp')) {
+                    link.type = 'image/webp';
+                }
                 document.head.appendChild(link);
             });
         }
